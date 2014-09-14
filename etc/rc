@@ -1,0 +1,16 @@
+#!/bin/sh
+
+ln -s /apps/usr/lib /usr/lib
+ln -s /apps/usr/share/fonts /usr/share/fonts
+ln -s /apps/etc/lighttpd /etc/lighttpd
+mkdir -p /var/log/lighttpd
+
+for initscript in /apps/etc/init.d/S[0-9][0-9]*
+do
+        if [ -x $initscript ] ;
+        then
+                echo "[RCS]: $initscript"
+                $initscript
+        fi
+done
+

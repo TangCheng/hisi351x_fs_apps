@@ -1,0 +1,63 @@
+#!/bin/sh
+# Useage: ./load3518_stage2 [ sensor ]
+#
+
+detect_ar0130()
+{
+    himm 0x20030030 0x5 > /dev/null;              #Sensor clock 27 MHz
+    sensor_id=`/apps/usr/sbin/i2c_read 0x20 0x3000 0x3000 2 2 | grep ^0x3000 | awk '{print $2}'`
+    if [ "x${sensor_id}" = "x0x2402" ]; then
+	echo "...sensor AR0130 detected..."
+	exit
+    fi
+}
+
+detect_ar0331()
+{
+    himm 0x20030030 0x5 > /dev/null;              #Sensor clock 27 MHz
+    sensor_id=`/apps/usr/sbin/i2c_read 0x20 0x3000 0x3000 2 2 | grep ^0x3000 | awk '{print $2}'`
+    if [ "x${sensor_id}" = "x0x2602" ]; then
+	echo "...sensor AR0331 detected..."
+	exit
+    fi
+}
+
+detect_nt99141()
+{
+    himm 0x20030030 0x1 > /dev/null;              #Sensor clock 24 MHz
+}
+
+detect_imx222()
+{
+    himm 0x200f000c 0x1 > /dev/null;              #pinmux SPI0
+    himm 0x200f0010 0x1 > /dev/null;              #pinmux SPI0
+    himm 0x200f0014 0x1 > /dev/null;              #pinmux SPI0
+    himm 0x20030030 0x6 > /dev/null;              #Sensor clock 37.125 MHz
+    sensor_id=`/apps/usr/sbin/ssp_read 0x2083 0x17 | awk -F' = ' '{print $2}'`
+    if [ "x${sensor_id}" = "x0x4d" ]; then
+        echo "...sensor IMX222 detected..."
+        exit
+    fi
+}
+
+load_usage()
+{
+    echo "Usage:  ./load3518_stage2 [sensor_name]"
+    echo -e "Available sensors: AR0130, AR0331, NT99141, IMX222"
+    echo -e "for example: ./load3518_stage2 AR0130 \n"
+}
+
+# load module.
+if [ $# -eq 0 ]
+then
+    detect_ar0130
+    detect_ar0331
+    detect_nt99141
+    detect_imx222
+    exit
+fi
+
+if [ $# -g 0 ]
+then
+    export SENSOR_TYPE=$1
+fi

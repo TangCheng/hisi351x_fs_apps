@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd /apps/ko
+./load3518_stage1 -i
+#./load3518_stage2
+./load3518_stage3 -i
+cd -

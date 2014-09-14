@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ -e /apps/usr/bin/timer ]; then
+  /apps/usr/bin/timer &
+fi
+
+if [ -e /apps/iconfig/iconfig ]; then
+  cd /apps/iconfig
+  ./iconfig &
+  cd -
+fi
+
+if [ -e /apps/ionvif/ionvif ]; then
+  cd /apps/ionvif
+  ./ionvif &
+  cd -
+fi
+
+if [ -e /apps/imedia/imedia ]; then
+  cd /apps/imedia
+  SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
+  export SENSOR_TYPE=${SENSOR_TYPE}
+  ./imedia &
+  cd -
+fi
+
+if [ -e /apps/irtsp/irtsp ]; then
+  cd /apps/irtsp
+  ./irtsp &
+  cd -
+fi
+
