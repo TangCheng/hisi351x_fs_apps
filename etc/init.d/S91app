@@ -1,5 +1,8 @@
 #!/bin/sh
 
+mkdir /data
+mount -t jffs2 /dev/mtdblock5 /data
+
 if [ -e /apps/usr/bin/timer ]; then
   /apps/usr/bin/timer &
 fi
