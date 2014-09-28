@@ -1,0 +1,9 @@
+#!/bin/sh
+
+mkdir /data
+if mount -t jffs2 /dev/mtdblock6 /data 2>/dev/null; then
+  :
+else
+  flash_eraseall -j /dev/mtd6
+  mount -t jffs2 /dev/mtdblock6 /data
+fi
