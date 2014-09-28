@@ -1,3 +1,6 @@
 #!/bin/sh
 
+mkdir /var/www
+mount -t jffs2 /dev/mtdblock5 /var/www
+
 /apps/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
