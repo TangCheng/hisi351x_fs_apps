@@ -16,6 +16,12 @@ if [ -e /apps/ionvif/ionvif ]; then
   cd -
 fi
 
+if [ -e /apps/ionvif-discovery/ionvif-discovery ]; then
+  cd /apps/ionvif-discovery
+  ./ionvif-discovery &
+  cd -
+fi
+
 if [ -e /apps/imedia/imedia ]; then
   cd /apps/imedia
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
