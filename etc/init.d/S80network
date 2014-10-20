@@ -30,7 +30,7 @@ EOF
 done
 
 if [ -z "$ipaddr" ] ; then
-  ipinfo=`/apps/bin/network.sh`
+  ipinfo=`network.sh`
   for var in method ipaddr netmask gateway dns1 dns2 username password netdev
   do
     eval read $var

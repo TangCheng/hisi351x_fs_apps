@@ -13,22 +13,22 @@ netdev=
 database=/data/configuration.sqlite3
 
 if [ -f $database ] ; then
-  method=`/apps/usr/bin/sqlite3 $database "select value from network;"`
+  method=`sqlite3 $database "select value from network;"`
   case $method in
     'static')
-      ipaddr=`/apps/usr/bin/sqlite3 $database "select value from network_static where name='ipaddr';"`
-      netmask=`/apps/usr/bin/sqlite3 $database "select value from network_static where name='netmask';"`
-      gateway=`/apps/usr/bin/sqlite3 $database "select value from network_static where name='gateway';"`
-      dns1=`/apps/usr/bin/sqlite3 $database "select value from network_static where name='dns1';"`
-      dns2=`/apps/usr/bin/sqlite3 $database "select value from network_static where name='dns2';"`
+      ipaddr=`sqlite3 $database "select value from network_static where name='ipaddr';"`
+      netmask=`sqlite3 $database "select value from network_static where name='netmask';"`
+      gateway=`sqlite3 $database "select value from network_static where name='gateway';"`
+      dns1=`sqlite3 $database "select value from network_static where name='dns1';"`
+      dns2=`sqlite3 $database "select value from network_static where name='dns2';"`
       netdev="eth0"
     ;;
     'dhcp')
       netdev="eth0"
     ;;
     'pppoe')
-      username=`/apps/usr/bin/sqlite3 $database "select value from network_pppoe where name='username';"`
-      password=`/apps/usr/bin/sqlite3 $database "select value from network_pppoe where name='password';"`
+      username=`sqlite3 $database "select value from network_pppoe where name='username';"`
+      password=`sqlite3 $database "select value from network_pppoe where name='password';"`
       netdev="eth0"
     ;;
   esac

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+database=/data/configuration.sqlite3
+
+if [ -f $database ] ; then
+  timezone=`sqlite3 $database "select value from datetime where name='timezone';" | awk '{print $2}'`
+  timezone_file=`find /usr/share/zoneinfo/ | grep -m1 $timezone`
+  if [ -n $timezone_file ] ; then
+    rm -f /etc/localtime
+    ln -s $timezone_file /etc/localtime
+  fi
+fi

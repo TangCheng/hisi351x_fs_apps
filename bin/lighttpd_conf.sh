@@ -5,7 +5,7 @@ ionvif_conf=/apps/ionvif/config/app.yml
 iconfig_conf=/apps/iconfig/config/app.yml
 
 if [ -f $database ] ; then
-  http_port=`/apps/usr/bin/sqlite3 $database "select value from network_port where name='http';"`
+  http_port=`sqlite3 $database "select value from network_port where name='http';"`
   sed -i "s/server.port\ =\ .*/server.port\ =\ $http_port/g" /etc/lighttpd/lighttpd.conf
 fi
 

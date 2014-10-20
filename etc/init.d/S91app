@@ -10,6 +10,12 @@ if [ -e /apps/iconfig/iconfig ]; then
   cd -
 fi
 
+if [ -e /apps/isystem/isystem ]; then
+  cd /apps/isystem
+  ./isystem &
+  cd -
+fi
+
 if [ -e /apps/ionvif/ionvif ]; then
   cd /apps/ionvif
   ./ionvif &
