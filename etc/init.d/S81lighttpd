@@ -1,6 +1,37 @@
 #!/bin/sh
 
-mkdir /var/www
-mount -t jffs2 /dev/mtdblock5 /var/www
+LIGHTTPD_CONF_BIN=/apps/bin/lighttpd_conf.sh
+LIGHTTPD_BIN=/apps/usr/sbin/lighttpd
+test -x $LIGHTTPD_BIN || exit 5
+LIGHTTPD_CONFIG=/etc/lighttpd/lighttpd.conf
+test -r $LIGHTTPD_CONFIG || exit 6
+LIGHTTPD_PIDFILE=/var/run/lighttpd.pid
 
-/apps/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
+
+case "$1" in
+  start)
+    echo "Starting lighttpd"
+    $LIGHTTPD_CONF_BIN
+    $LIGHTTPD_BIN -f $LIGHTTPD_CONFIG
+    ;;
+  stop)
+    echo "Shutting down lighttpd"
+    kill `cat $LIGHTTPD_PIDFILE`
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  force-reload|reload)
+    echo "Reload service lighttpd"
+    kill -INT `cat $LIGHTTPD_PIDFILE`
+    $0 start
+    touch $LIGHTTPD_PIDFILE
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload|reload}"
+    $0 start
+    exit 1
+    ;;
+esac

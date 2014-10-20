@@ -22,17 +22,25 @@ if [ -e /apps/ionvif-discovery/ionvif-discovery ]; then
   cd -
 fi
 
-if [ -e /apps/imedia/imedia ]; then
-  cd /apps/imedia
+if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
+  cd /apps/imedia_rtsp
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
   export SENSOR_TYPE=${SENSOR_TYPE}
-  ./imedia &
+  ./imedia_rtsp &
   cd -
 fi
 
-if [ -e /apps/irtsp/irtsp ]; then
-  cd /apps/irtsp
-  ./irtsp &
-  cd -
-fi
+#if [ -e /apps/imedia/imedia ]; then
+#  cd /apps/imedia
+#  SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
+#  export SENSOR_TYPE=${SENSOR_TYPE}
+#  ./imedia &
+#  cd -
+#fi
+
+#if [ -e /apps/irtsp/irtsp ]; then
+#  cd /apps/irtsp
+#  ./irtsp &
+#  cd -
+#fi
 
