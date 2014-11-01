@@ -7,25 +7,27 @@ fi
 if [ -e /apps/iconfig/iconfig ]; then
   cd /apps/iconfig
   ./iconfig &
-  cd -
 fi
 
 if [ -e /apps/isystem/isystem ]; then
   cd /apps/isystem
   ./isystem &
-  cd -
+fi
+
+if [ -e /apps/iajax/iajax ]; then
+  cd /apps/iajax
+  ./iajax &
+  sleep 5
 fi
 
 if [ -e /apps/ionvif/ionvif ]; then
   cd /apps/ionvif
   ./ionvif &
-  cd -
 fi
 
 if [ -e /apps/ionvif-discovery/ionvif-discovery ]; then
   cd /apps/ionvif-discovery
   ./ionvif-discovery &
-  cd -
 fi
 
 if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
@@ -33,7 +35,6 @@ if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
   export SENSOR_TYPE=${SENSOR_TYPE}
   ./imedia_rtsp &
-  cd -
 fi
 
 #if [ -e /apps/imedia/imedia ]; then
@@ -41,12 +42,10 @@ fi
 #  SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
 #  export SENSOR_TYPE=${SENSOR_TYPE}
 #  ./imedia &
-#  cd -
 #fi
 
 #if [ -e /apps/irtsp/irtsp ]; then
 #  cd /apps/irtsp
 #  ./irtsp &
-#  cd -
 #fi
 

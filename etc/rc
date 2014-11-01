@@ -4,6 +4,7 @@ ln -s /apps/usr/lib /usr/lib
 ln -s /apps/usr/share/fonts /usr/share/fonts
 ln -s /apps/usr/share/zoneinfo /usr/share/zoneinfo
 mkdir -p /var/log/lighttpd
+mkdir -p /var/lib/lighttpd/sockets
 
 for file in /apps/bin/*
 do
