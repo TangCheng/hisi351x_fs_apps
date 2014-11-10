@@ -50,6 +50,7 @@ insert_ko()
     insmod mmz.ko mmz=anonymous,0,0x88000000,128M anony=1 || report_error
     insmod hi3518_base.ko
     insmod hi3518_sys.ko
+    insmod hiuser.ko
 
     insmod hi3518_tde.ko
     insmod hi3518_dsu.ko
@@ -121,7 +122,8 @@ remove_ko()
 
     rmmod hi3518_dsu
     rmmod hi3518_tde
-  
+
+    rmmod hiuser
     rmmod hi3518_sys
     rmmod hi3518_base
     rmmod mmz
