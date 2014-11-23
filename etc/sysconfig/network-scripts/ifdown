@@ -1,0 +1,9 @@
+#!/bin/sh
+
+iface=eth0
+if [ "x$1" != "x" ]; then
+  iface=$1
+fi
+
+ifconfig ${iface} 0.0.0.0
+

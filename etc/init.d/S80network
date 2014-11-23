@@ -1,65 +1,26 @@
 #!/bin/sh
 
-method=
-ipaddr=
-bootp=
-gateway=
-netmask=
-dns1=
-dns2=
-hostname=
-netdev=
-autoconf=
-username=
-password=
+ACTION_SCRIPT=/apps/etc/ifplugd/ifplugd.action
 
-for ipinfo in `cat /proc/cmdline`
-do
-  case "$ipinfo" in
-    ip=*)
-      for var in  ipaddr bootp gateway netmask hostname netdev autoconf
-      do
-        eval read $var
-      done << EOF
-        `echo "$ipinfo" | sed "s/:/\n/g" | sed "s/^[ 	]*$/-/g"`
-EOF
-      ipaddr=`echo "$ipaddr" | cut -d = -f 2`
-      [ x$ipaddr == x ] && ipaddr=x
-      ;;
-  esac
-done
+case "$1" in
+  start)
+    echo "Starting network"
+    setuidgid root \
+    ifplugd -I -i eth0 -r /apps/etc/ifplugd/ifplugd.action
+    ifconfig lo 127.0.0.1
+    ;;
+  stop)
+    echo "Shutting down network"
+    ifplugd -k
+    ;;
+  restart)
+    $0 stop
+    usleep 200000
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
 
-if [ -z "$ipaddr" ] ; then
-  ipinfo=`network.sh`
-  for var in method ipaddr netmask gateway dns1 dns2 username password netdev
-  do
-    eval read $var
-  done << EOF
-     `echo "$ipinfo" | sed "s/:/\n/g" | sed "s/^[ 	]*$/-/g"`
-EOF
-fi
-
-echo "      IP: $ipaddr"
-echo "   BOOTP: $bootp"
-echo " GATEWAY: $gateway"
-echo " NETMASK: $netmask"
-echo "HOSTNAME: $hostname"
-echo "  NETDEV: $netdev"
-echo "AUTOCONF: $autoconf"
-
-if [ x$ipaddr == x- -o x$method == xdhcp ] ; then
-  # use DHCP
-  udhcpc &
-elif [ x$method == xpppoe ] ; then
-  # use PPPoE
-  :
-else
-  cmd="ifconfig $netdev $ipaddr"
-  [ x$netmask != x- ] && cmd="$cmd netmask $netmask"
-  eval $cmd
-  [ x$gateway != x- ] && route add default gw $gateway
-  [ x$dns1 != x- ] && echo "nameserver $dns1" > /etc/resolv.conf
-  [ x$dns2 != x- ] && echo "nameserver $dns2" >> /etc/resolv.conf
-fi
-
-ifconfig lo 127.0.0.1

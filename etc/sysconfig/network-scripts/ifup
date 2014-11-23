@@ -1,0 +1,76 @@
+#!/bin/sh
+
+method=
+ipaddr=
+bootp=
+gateway=
+netmask=
+dns1=
+dns2=
+hostname=
+netdev=
+autoconf=
+username=
+password=
+
+for ipinfo in `cat /proc/cmdline`
+do
+  case "$ipinfo" in
+    ip=*)
+      for var in  ipaddr bootp gateway netmask hostname netdev autoconf
+      do
+        eval read $var
+      done << EOF
+        `echo "$ipinfo" | sed "s/:/\n/g" | sed "s/^[ 	]*$/-/g"`
+EOF
+      ipaddr=`echo "$ipaddr" | cut -d = -f 2`
+      [ x$ipaddr == x ] && ipaddr=x
+      ;;
+  esac
+done
+
+if [ -z "$ipaddr" ] ; then
+  ipinfo=`network.sh`
+  for var in method ipaddr netmask gateway dns1 dns2 username password netdev
+  do
+    eval read $var
+  done << EOF
+     `echo "$ipinfo" | sed "s/:/\n/g" | sed "s/^[ 	]*$/-/g"`
+EOF
+fi
+
+echo "      IP: $ipaddr"
+echo "   BOOTP: $bootp"
+echo " GATEWAY: $gateway"
+echo " NETMASK: $netmask"
+echo "HOSTNAME: $hostname"
+echo "  NETDEV: $netdev"
+echo "AUTOCONF: $autoconf"
+
+if [ x$ipaddr == x- -o x$method == xdhcp ] ; then
+  # use DHCP
+  if kill -0 $(cat /var/run/udhcpc.pid 2>&1) > /dev/null 2>&1; then
+    kill -USR1 $(cat /var/run/udhcpc.pid)
+    kill -USR1 $(cat /var/run/udhcpc.pid)
+  else
+    udhcpc -b -R -p /var/run/udhcpc.pid
+  fi
+elif [ x$method == xpppoe ] ; then
+  # use PPPoE
+  :
+else
+  # inactive dhcpc
+  if kill -0 $(cat /var/run/udhcpc.pid 2>&1) > /dev/null 2>&1; then
+    kill -USR2 $(cat /var/run/udhcpc.pid)
+  fi
+
+  usleep 200000
+
+  cmd="ifconfig $netdev $ipaddr"
+  [ x$netmask != x- ] && cmd="$cmd netmask $netmask"
+  eval $cmd
+  [ x$gateway != x- ] && route add default gw $gateway
+  [ x$dns1 != x- ] && echo "nameserver $dns1" > /etc/resolv.conf
+  [ x$dns2 != x- ] && echo "nameserver $dns2" >> /etc/resolv.conf
+fi
+
