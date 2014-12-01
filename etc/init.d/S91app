@@ -34,7 +34,7 @@ if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
   cd /apps/imedia_rtsp
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
   export SENSOR_TYPE=${SENSOR_TYPE}
-  ./imedia_rtsp &
+  nice -n -20 ./imedia_rtsp &
 fi
 
 #if [ -e /apps/imedia/imedia ]; then
