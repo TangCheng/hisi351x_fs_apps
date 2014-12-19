@@ -20,6 +20,11 @@ if [ -e /apps/iajax/iajax ]; then
   sleep 5
 fi
 
+if [ -e /apps/itrain/itrain ]; then
+  cd /apps/itrain
+  ./itrain &
+fi
+
 if [ -e /apps/ionvif/ionvif ]; then
   cd /apps/ionvif
   ./ionvif &
