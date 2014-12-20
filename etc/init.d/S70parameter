@@ -7,3 +7,10 @@ else
   flash_eraseall -j /dev/mtd6
   mount -t jffs2 /dev/mtdblock6 /data
 fi
+
+# import default configuration database
+if ! [ -f /data/configuration.sqlite3 ]; then
+  if [ -f /apps/iconfig/config/defconfig.sql ]; then
+    sqlite3 /data/configuration.sqlite3 < /apps/iconfig/config/defconfig.sql
+  fi
+fi
