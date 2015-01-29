@@ -47,7 +47,7 @@ insert_ko()
     source ./clkcfg_hi3518.sh > /dev/null
 
     # driver load
-    insmod mmz.ko mmz=anonymous,0,0x86000000,160M anony=1 || report_error
+    insmod mmz.ko mmz=anonymous,0,0x88000000,128M anony=1 || report_error
     insmod hi3518_base.ko
     insmod hi3518_sys.ko
     insmod hiuser.ko
