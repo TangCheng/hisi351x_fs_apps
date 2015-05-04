@@ -29,6 +29,7 @@ clk_cfg()
 	himm 0x20030068 0x2;		# MDU  unreset
 
 	#himm 0x2003006c 0x2;		# IVE  unreset
+	himm 0x20030080 0x2;    # ADC  unreset & clock enable
 	#himm 0x2003008c 0x2;		# SIO unreset and clock enable,m/f/bclk config in code.
 	#himm 0x20050068 0x58000000 # Audio Codec channel config for power down. 
 

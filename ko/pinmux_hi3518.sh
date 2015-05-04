@@ -118,6 +118,15 @@ vo_bt1120_mode()
 	himm 0x200f0078  0x2  #VOU1120_DATA14,MDIO 0x1,GPIO3_7 0x0
 }
 
+# IRCUT
+ircut_gpio_select()
+{
+	himm 0x200f00c0 0x1  #GPIO5_3,PWM_OUT1
+	himm 0x200f00ec 0x1  #NF_RDY1,GPIO8_1
+	himm 0x200f00fc 0x1  #NF_CLE,GPIO8_5,NF_BOOT_PIN1
+	himm 0x200f0100 0x1  #NF_ALE,GPIO8_6,NF_BOOT_PIN2
+}
+
 if [ $# -ge 1 ]; then
     pinmux_vo_select=$1
 fi
@@ -154,3 +163,4 @@ esac
 
 sensor_clock_select;
 #vicap_pin_mux_select;
+ircut_gpio_select
