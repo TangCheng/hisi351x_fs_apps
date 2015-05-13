@@ -1,12 +1,13 @@
 #!/bin/sh
 
 database=/data/configuration.sqlite3
+tz_file=/etc/TZ
 
 if [ -f $database ] ; then
-  timezone=`sqlite3 $database "select value from datetime where name='timezone';" | awk '{print $2}'`
-  timezone_file=`find /usr/share/zoneinfo/ | grep -m1 $timezone`
-  if [ -n $timezone_file ] ; then
-    rm -f /etc/localtime
-    ln -s $timezone_file /etc/localtime
-  fi
+  sqlcmd="select value from datetime where name='timezone'"
+  tzname=$(sqlite3 "$database" "${sqlcmd}")
+  sedexpr="s/(^<[^>]>|^[a-zA-Z]*)([+-:0-9]+).*/GMT\2/g"
+  timezone=$(echo $tzname | sed -r -e "$sedexpr")
 fi
+
+echo ${timezone:-"GMT-8"} > ${tz_file}
