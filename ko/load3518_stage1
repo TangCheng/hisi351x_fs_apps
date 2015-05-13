@@ -55,7 +55,7 @@ insert_ko()
     insmod hi3518_tde.ko
     insmod hi3518_dsu.ko
 
-    insmod hi3518_viu.ko
+    insmod hi3518_viu.ko ext_csc_en=0 csc_ct_mode=1 csc_tv_en=1
     insmod hi3518_isp.ko proc_param=30
     insmod hi3518_vpss.ko
     #insmod hi3518_vou.ko
