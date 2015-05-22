@@ -6,8 +6,11 @@ tz_file=/etc/TZ
 if [ -f $database ] ; then
   sqlcmd="select value from datetime where name='timezone'"
   tzname=$(sqlite3 "$database" "${sqlcmd}")
-  sedexpr="s/(^<[^>]>|^[a-zA-Z]*)([+-:0-9]+).*/GMT\2/g"
-  timezone=$(echo $tzname | sed -r -e "$sedexpr")
+  timezone=$( \
+    echo $tzname | \
+    sed -r -e 's/^([a-zA-Z]+|<[^>]*>)([-]?[0-9:]+)/CST\2/g' \
+           -e 's/DaylightTime/DST/g' \
+  )
 fi
 
-echo ${timezone:-"GMT-8"} > ${tz_file}
+echo ${timezone:-"CST-8"} > ${tz_file}
