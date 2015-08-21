@@ -5,8 +5,10 @@ ACTION_SCRIPT=/apps/etc/ifplugd/ifplugd.action
 case "$1" in
   start)
     echo "Starting network"
+    ethaddr=$(fw_printenv ethaddr)
+    ifconfig eth0 hw ether ${ethaddr#*ethaddr=}
     setuidgid root \
-    ifplugd -I -i eth0 -r /apps/etc/ifplugd/ifplugd.action
+      ifplugd -I -i eth0 -r /apps/etc/ifplugd/ifplugd.action
     ifconfig lo 127.0.0.1
     ;;
   stop)
