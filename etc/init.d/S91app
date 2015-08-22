@@ -1,56 +1,43 @@
 #!/bin/sh
 
 if [ -e /apps/usr/bin/timer ]; then
-  /apps/usr/bin/timer &
+  /apps/usr/bin/timer 2>&1 | logger -t timer &
 fi
 
 if [ -e /apps/iconfig/iconfig ]; then
   cd /apps/iconfig
-  nice -n 10 ./iconfig &
+  ./iconfig 2>&1 | logger -t iconfig &
 fi
 
 if [ -e /apps/isystem/isystem ]; then
   cd /apps/isystem
-  nice -n 10 ./isystem &
+  ./isystem 2>&1 | logger -t isystem &
 fi
 
 if [ -e /apps/iajax/iajax ]; then
   cd /apps/iajax
-  nice -n 0 ./iajax &
-  sleep 2
+  ./iajax 2>&1 | logger -t iajax &
 fi
 
 if [ -e /apps/itrain/itrain ]; then
   cd /apps/itrain
-  nice -n 0 ./itrain &
+  ./itrain 2>&1 | logger -t itrain &
 fi
 
 if [ -e /apps/ionvif/ionvif ]; then
   cd /apps/ionvif
-  nice -n 0 ./ionvif &
+  ./ionvif 2>&1 | logger -t ionvif &
 fi
 
 if [ -e /apps/ionvif-discovery/ionvif-discovery ]; then
   cd /apps/ionvif-discovery
-  nice -n 0 ./ionvif-discovery &
+  ./ionvif-discovery 2>&1 | logger -t ionvif-discovery &
 fi
 
 if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
   cd /apps/imedia_rtsp
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
   export SENSOR_TYPE=${SENSOR_TYPE}
-  nice -n 0 ./imedia_rtsp &
+  ./imedia_rtsp 2>&1 | logger -t imedia_rtsp &
 fi
-
-#if [ -e /apps/imedia/imedia ]; then
-#  cd /apps/imedia
-#  SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
-#  export SENSOR_TYPE=${SENSOR_TYPE}
-#  ./imedia &
-#fi
-
-#if [ -e /apps/irtsp/irtsp ]; then
-#  cd /apps/irtsp
-#  ./irtsp &
-#fi
 
