@@ -36,6 +36,8 @@ fi
 
 if [ -e /apps/imedia_rtsp/imedia_rtsp ]; then
   cd /apps/imedia_rtsp
+  ircut=`fw_printenv ircut 2>/dev/null`
+  export IRCUT=${ircut:6}
   SENSOR_TYPE=`/apps/ko/load3518_stage2 | awk '{print $2}'`
   export SENSOR_TYPE=${SENSOR_TYPE}
   launcher.sh ./imedia_rtsp 2>&1 | logger -t imedia_rtsp &
